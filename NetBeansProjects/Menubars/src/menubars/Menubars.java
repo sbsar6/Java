@@ -7,6 +7,7 @@ package menubars;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
 /**
  *
  * @author Andrew
@@ -19,6 +20,8 @@ public class Menubars extends JFrame {
          private JMenu menuEdit;
          private JMenu menuOpen;
          private JMenu menuSave;
+         private JPanel wind;
+         private JFrame frame;
          
          public Menubars(){
              setTitle("Mi Pics");
@@ -43,6 +46,23 @@ public class Menubars extends JFrame {
              menuFile.addSeparator();
              menuFile.add (menuOpen);
              menuFile.addSeparator();
+             menuOpen.addActionListener(new ActionListener() {
+             public void actionPerformed(java.awt.event.ActionEvent e){
+                 JFileChooser chooser = new JFileChooser(".");
+                 int status = chooser.showOpenDialog(Menubars.this);
+                 if (status == JFileChooser.APPROVE_OPTION ){
+                     try(
+                             JFrame frame = new JFrame ();
+                             JLabel wind = new JLabel (new ImageIcon(chooser.getSelectedFile().toURL()));
+                             frame.add(wind);
+                             
+                             
+                 }
+                     catch (Exception E2){
+                         System.err.println("Err"+ E2);
+                     }
+             
+         };
              
              //add save subitem
              menuSave = new JMenu ("Save");
