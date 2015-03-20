@@ -5,13 +5,17 @@
  */
 package mipics;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.*;
 import javax.swing.*;
-/**
- *
- * @author Andrew
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+
+ /*** @author Andrew
  */
 public class MiPic extends javax.swing.JFrame {
 
@@ -32,6 +36,7 @@ public class MiPic extends javax.swing.JFrame {
     private void initComponents() {
 
         jSP = new javax.swing.JScrollPane();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMI_Open = new javax.swing.JMenuItem();
@@ -40,8 +45,12 @@ public class MiPic extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setText("jLabel1");
+        jSP.setViewportView(jLabel1);
+
         jMenu1.setText("File");
 
+        jMI_Open.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, 0));
         jMI_Open.setText("Open");
         jMI_Open.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,13 +90,29 @@ public class MiPic extends javax.swing.JFrame {
 JLabel jlab = new JLabel();
     private void jMI_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMI_OpenActionPerformed
         // TODO add your handling code here:
-        JFileChooser jfc = new JFileChooser();
-        
-        if(jfc.showOpenDialog(jMenu1)== JFileChooser.APPROVE_OPTION){
-            java.io.File gf = jfc.getSelectedFile();
-            
-            
-            jlab.setIcon(new Icon (gf.toString()) {});
+        BufferedImage image;
+        try{
+            String userhome = System.getProperty("user.home");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file only","JPEG file", "jpg", "jpeg");
+            JFileChooser fileChooser = new JFileChooser(userhome+"\\Pictures");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            int returnValue = fileChooser.showOpenDialog(null);
+            if(returnValue == JFileChooser.APPROVE_OPTION){
+                
+                File file = fileChooser.getSelectedFile();
+                
+                image = ImageIO.read(file);
+                ImageIcon icon;
+                icon = new ImageIcon(image);
+                jLabel1.setIcon(icon);
+               
+        }
+        }
+        catch (HeadlessException | IOException e) {System.out.println(e);}
+    }
+  
+            /*jlab.setIcon(new Icon (gf.toString()) {});
             jlab.setHorizontalAlignment(JLabel.CENTER);
             
             jSP.getViewport().add(jlab);
@@ -98,7 +123,7 @@ JLabel jlab = new JLabel();
         // TODO add your handling code here:
         jlab.setIcon(null);
     }//GEN-LAST:event_jMI_ClearActionPerformed
-
+/*
     /**
      * @param args the command line arguments
      */
@@ -135,6 +160,7 @@ JLabel jlab = new JLabel();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMI_Clear;
     private javax.swing.JMenuItem jMI_Open;
     private javax.swing.JMenu jMenu1;
