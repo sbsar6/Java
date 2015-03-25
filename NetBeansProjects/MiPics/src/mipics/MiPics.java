@@ -19,6 +19,10 @@ import javax.swing.*;
  */
 public class MiPics extends javax.swing.JFrame {
 
+    static void ImagePreview() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
    public MiPics() {
             initComponents();
            // listFiles(Path);    //Lists all the files in the directory on window opening

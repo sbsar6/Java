@@ -6,19 +6,22 @@
 package mipics;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
+import java.beans.PropertyChangeEvent;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import mipics.ImagePreview;
 
 
  /*** @author Andrew
  */
 public class MiPic extends javax.swing.JFrame {
-
+    
+    private JFileChooser jfc;
+    private Image img;
     /**
      * Creates new form MiPic
      */
@@ -40,7 +43,6 @@ public class MiPic extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMI_Open = new javax.swing.JMenuItem();
-        jMI_Clear = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,14 +60,6 @@ public class MiPic extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMI_Open);
-
-        jMI_Clear.setText("Clear");
-        jMI_Clear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMI_ClearActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMI_Clear);
 
         jMenuBar1.add(jMenu1);
 
@@ -89,8 +83,88 @@ public class MiPic extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 JLabel jlab = new JLabel();
     private void jMI_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMI_OpenActionPerformed
-        // TODO add your handling code here:
-        BufferedImage image;
+    
+       
+        try{
+            String userhome = System.getProperty("user.home");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file only","JPEG file", "jpg", "jpeg","gif", "png");
+            JFileChooser fileChooser = new JFileChooser(userhome+"\\Pictures");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            int returnValue = fileChooser.showOpenDialog(null);
+            if(returnValue == JFileChooser.APPROVE_OPTION){
+                
+                File file = fileChooser.getSelectedFile();
+                updateImage(file);
+                BufferedImage image = ImageIO.read(file);
+                Dimension sz = new Dimension(300,300);
+                setPreferredSize(sz);
+                
+          try {
+            System.out.println("updating");
+                     updateImage(file);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        } 
+            if(file == null) {
+            return;
+        }
+        JFrame frame = new JFrame();
+        frame.setSize(600, 600);
+        JLabel label = new JLabel(new ImageIcon(image));
+        frame.add(label);
+        frame.setVisible(true);
+        img = ImageIO.read(file);
+        repaint();
+        
+               
+        }
+        }
+        catch (HeadlessException | IOException e) {System.out.println(e);}
+    } 
+     
+        
+public void propertyChange(PropertyChangeEvent evt) {
+        
+    }
+    
+    public void updateImage(File file) throws IOException {
+        
+    }
+    
+    public void paintComponent(Graphics g) {
+        // fill the background
+        g.setColor(Color.gray);
+        g.fillRect(0,0,getWidth(),getHeight());
+        
+        if(img != null) {
+            // calculate the scaling factor
+            int w = img.getWidth(null);
+            int h = img.getHeight(null);
+            int side = Math.max(w,h);
+            double scale = 200.0/(double)side;
+            w = (int)(scale * (double)w);
+            h = (int)(scale * (double)h);
+            
+            // draw the image
+            g.drawImage(img,0,0,w,h,null);
+            
+            // draw the image dimensions
+            String dim = w + " x " + h;
+            g.setColor(Color.black);
+            g.drawString(dim,31,196);
+            g.setColor(Color.white);
+            g.drawString(dim,30,195);
+            
+        } else {
+            
+            // print a message
+            g.setColor(Color.black);
+            g.drawString("Not an image",30,100);
+        }
+    
+   /*     BufferedImage image;
         try{
             String userhome = System.getProperty("user.home");
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file only","JPEG file", "jpg", "jpeg");
@@ -115,14 +189,11 @@ JLabel jlab = new JLabel();
             /*jlab.setIcon(new Icon (gf.toString()) {});
             jlab.setHorizontalAlignment(JLabel.CENTER);
             
-            jSP.getViewport().add(jlab);
-        }
-    }//GEN-LAST:event_jMI_OpenActionPerformed
+            jSP.getViewport().add(jlab);*/
 
-    private void jMI_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMI_ClearActionPerformed
-        // TODO add your handling code here:
-        jlab.setIcon(null);
-    }//GEN-LAST:event_jMI_ClearActionPerformed
+ 
+        
+    }//GEN-LAST:event_jMI_OpenActionPerformed
 /*
     /**
      * @param args the command line arguments
@@ -150,22 +221,25 @@ JLabel jlab = new JLabel();
             java.util.logging.Logger.getLogger(MiPic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        /*JFileChooser jfc = new JFileChooser();
+        ImagePreview preview = new ImagePreview(jfc);
+        jfc.addPropertyChangeListener(preview);
+        jfc.setAccessory(preview);
+        jfc.showOpenDialog(null);
+        jfc.paintComponents(null);
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MiPic().setVisible(true);
-            }
-        });
-    }
+               new MiPic().setVisible(true);
+            
+        
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuItem jMI_Clear;
     private javax.swing.JMenuItem jMI_Open;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jSP;
     // End of variables declaration//GEN-END:variables
+
 }
