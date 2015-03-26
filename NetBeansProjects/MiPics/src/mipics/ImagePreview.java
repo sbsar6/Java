@@ -80,6 +80,14 @@ public class ImagePreview extends JPanel implements PropertyChangeListener {
         ImagePreview preview = new ImagePreview(jfc);
         jfc.addPropertyChangeListener(preview);
         jfc.setAccessory(preview);
-        jfc.showOpenDialog(null);
+        int returnValue = jfc.showOpenDialog(null);
+        
+               
+            if(returnValue == JFileChooser.APPROVE_OPTION){
+                
+            File file = jfc.getSelectedFile();
+                System.out.println(file.getName());
+            }   
+                
     }
 }
