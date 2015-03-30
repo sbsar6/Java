@@ -6,6 +6,8 @@
 package normal;
 
 import java.io.*;
+import java.util.HashMap;
+
 
 /**
  *
@@ -20,15 +22,32 @@ import java.io.*;
     double accounScore = 0;
     double quantScore = 0;
     double archScore = 0;
-    
-        System.out.println("Please enter title to check for normalisation");
+   HashMap seNorm = new HashMap();  
+   seNorm.put("software engineer", 0.9);
+   seNorm.put("software", 0.45);
+   seNorm.put("engineer", 0.45);
+ 
+   HashMap accNorm = new HashMap();
+   accNorm.put("accountant", 0.9);
+   accNorm.put("finance", 0.5);
+   
+   HashMap quantNorm = new HashMap();
+   quantNorm.put("quantity surveyor", 0.9);
+   quantNorm.put("quantity", 0.45);
+   quantNorm.put("surveyor", 0.45);
+   
+   HashMap archiNorm = new HashMap();
+   archiNorm.put("architect", 0.9);
+   
+   
+   System.out.println("Please enter title to check for normalisation");
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(isr);
         String normal = "";
         
         try
         { 
-            normal = buffer.readLine();
+            normal = buffer.readLine().toLowerCase();
             buffer.close();          
         }
         catch(IOException e) 
@@ -36,32 +55,51 @@ import java.io.*;
         
             System.out.println("An input error has occured");
                 }
-     
-    if (normal.contains("Engineer")|| normal.contains("engineer")&& normal.contains("Software")||normal.contains("software")){
-        seScore = seScore +1;
+    if (seNorm.containsKey(normal)){
+        seScore = (double) seNorm.get(normal);
+       
+    }
+    else if (quantNorm.containsKey(normal)){
+        quantScore = (double) quantNorm.get(normal);
     }
     
-    else if (normal.contains("Engineer")||normal.contains("engineer")|| normal.contains("Software")||normal.contains("software")){
-        seScore =seScore +0.5;}
-    
-    if (normal.contains("Quantity")||normal.contains("quantity")&& normal.contains("Surveyor")||normal.contains("surveyor")){
-        quantScore =quantScore +1;
+     else if (accNorm.containsKey(normal)){
+        accounScore = (double) accNorm.get(normal);
     }
-    
-    else if (normal.contains("Quantity")||normal.contains("quantity")|| normal.contains("Surveyor")||normal.contains("surveyor")){
-        quantScore =quantScore +0.5;}
-    
-    if (normal.contains("Architect")||normal.contains("architect")){
-        archScore =archScore +1;
-    }
-    if (normal.contains("Accountant")||normal.contains("accountant")){
-        accounScore =accounScore +1;
+     else if (archiNorm.containsKey(normal)){
+        archScore = (double) archiNorm.get(normal);
     }
     else {
         System.out.println("No match found");
         return;
     }
     
+    
+    /*if (normal.contains("architect")){
+        archScore =archScore +1;
+    }
+    if (normal.contains("accountant")){
+        accounScore =accounScore +1;
+    }if (normal.contains("Engineer")&& normal.contains("software")){
+        seScore = seScore +1;
+    }
+    
+    else if (normal.contains("engineer")|| normal.contains("software")){
+        seScore =seScore +0.5;}
+    
+    if (normal.contains("quantity")&& normal.contains("surveyor")){
+        quantScore =quantScore +1;
+    }
+    
+    else if (normal.contains("quantity")|| normal.contains("surveyor")){
+        quantScore =quantScore +0.5;}
+    
+
+    else {
+        System.out.println("No match found");
+        return;
+    }
+    */
     if (seScore > quantScore && seScore > archScore && seScore > accounScore){
         System.out.println("Normalisation is Software Engineer");
     }
@@ -77,10 +115,13 @@ import java.io.*;
         System.out.println("Normalisation is Accountant");
     
     }
+            
     else {
         System.out.println("No normalisation found, has similarities with more than one type");
     }
-}
+
+            
+            }
 }
 
 
