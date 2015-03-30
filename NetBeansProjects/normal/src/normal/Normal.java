@@ -3,22 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lists;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+package normal;
+
+import java.io.*;
 
 /**
  *
  * @author Andrew
- */
-public class Lists {
 
-    /**
-     * @param args the command line arguments
+
      */
-    public static void main(String[] args) {
-   double seScore = 0;
+ public class Normal {
+ public static void main(String[] args) {
+
+    double seScore = 0;
     double accounScore = 0;
     double quantScore = 0;
     double archScore = 0;
@@ -39,12 +37,11 @@ public class Lists {
             System.out.println("An input error has occured");
                 }
      
-    if (normal.contains("Software")|| normal.contains("software")&& normal.contains("Engineer")|| normal.contains("engineer") ){
+    if (normal.contains("Engineer")|| normal.contains("engineer")&& normal.contains("Software")||normal.contains("software")){
         seScore = seScore +1;
-        System.out.println("seScore");
     }
-        
-    else if ( normal.contains("Engineer")|| normal.contains("engineer")|| normal.contains("Software")|| normal.contains("software")){
+    
+    else if (normal.contains("Engineer")||normal.contains("engineer")|| normal.contains("Software")||normal.contains("software")){
         seScore =seScore +0.5;}
     
     if (normal.contains("Quantity")||normal.contains("quantity")&& normal.contains("Surveyor")||normal.contains("surveyor")){
@@ -57,7 +54,7 @@ public class Lists {
     if (normal.contains("Architect")||normal.contains("architect")){
         archScore =archScore +1;
     }
-    else if (normal.contains("Accountant")||normal.contains("accountant")){
+    if (normal.contains("Accountant")||normal.contains("accountant")){
         accounScore =accounScore +1;
     }
     else {
@@ -83,6 +80,8 @@ public class Lists {
     else {
         System.out.println("No normalisation found, has similarities with more than one type");
     }
-    
 }
 }
+
+
+
