@@ -4,6 +4,7 @@ package normal;
 import java.io.*;
 import java.util.HashMap;
 
+
 /**
  * @author Andrew
 
@@ -20,10 +21,14 @@ import java.util.HashMap;
    seNorm.put("software engineer", 0.9);
    seNorm.put("software", 0.45);
    seNorm.put("engineer", 0.45);
+   seNorm.put("c#", 0.4);
+   seNorm.put("java", 0.4);
+   seNorm.put("C# engineer",0.4);
  
    HashMap accNorm = new HashMap();
    accNorm.put("accountant", 0.9);
    accNorm.put("finance", 0.5);
+   accNorm.put("chief accountant", 0.4);
    
    HashMap quantNorm = new HashMap();
    quantNorm.put("quantity surveyor", 0.9);
@@ -32,6 +37,7 @@ import java.util.HashMap;
    
    HashMap archiNorm = new HashMap();
    archiNorm.put("architect", 0.9);
+   archiNorm.put("head architect", 0.4);
    
  //get string to test for normalization  
    System.out.println("Please enter title to check for normalisation");
@@ -54,21 +60,21 @@ import java.util.HashMap;
         if (seNorm.containsKey(normal)){
         seScore = (double) seNorm.get(normal);
        
-        }
-        else if (quantNorm.containsKey(normal)){
-          quantScore = (double) quantNorm.get(normal);
-        }
+    }
+    else if (quantNorm.containsKey(normal)){
+        quantScore = (double) quantNorm.get(normal);
+    }
     
-        else if (accNorm.containsKey(normal)){
-          accounScore = (double) accNorm.get(normal);
-        }
-        else if (archiNorm.containsKey(normal)){
-          archScore = (double) archiNorm.get(normal);
-        }
-        else {
-            System.out.println("No match found");
-            return;
-        }
+     else if (accNorm.containsKey(normal)){
+        accounScore = (double) accNorm.get(normal);
+    }
+     else if (archiNorm.containsKey(normal)){
+        archScore = (double) archiNorm.get(normal);
+    }
+    else {
+        System.out.println("No match found");
+        return;
+    }
     
     // Determine highest score and return normalisation
     if (seScore > quantScore && seScore > archScore && seScore > accounScore){
@@ -79,14 +85,19 @@ import java.util.HashMap;
     }
     else if (archScore > seScore && archScore> quantScore && archScore> accounScore){
         System.out.println("Normalisation is Architect");
+    
+ 
     }
     else if (accounScore > seScore && accounScore> quantScore && accounScore> archScore){
         System.out.println("Normalisation is Accountant");
-    }     
+    
+    }
+            
     else {
         System.out.println("No normalisation found, has similarities with more than one type");
     }
-       
+
+            
             }
 }
 
