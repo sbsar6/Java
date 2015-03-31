@@ -33,7 +33,7 @@ public class Eysys2 {
 } 
     //Calculating mean from array
       public static int getStats(int[]a){
-        HashMap stats = new HashMap();  
+   HashMap stats = new HashMap();  
    stats.put("Mean value is ", mean(a));
    stats.put("Median value is ", median(a));
    stats.put("Modal value is ", mode(a));
