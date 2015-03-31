@@ -22,7 +22,7 @@ import java.util.HashMap;
    seNorm.put("software", 0.45);
    seNorm.put("engineer", 0.45);
    seNorm.put("c#", 0.4);
-   seNorm.put("java", 0.4);
+   seNorm.put("java engineer", 0.4);
    seNorm.put("c# engineer",0.4);
  
    HashMap accNorm = new HashMap();
