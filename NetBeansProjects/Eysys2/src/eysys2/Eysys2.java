@@ -16,8 +16,10 @@ public class Eysys2 {
     /**
      * @param args the command line arguments
      */
-    public static void main(int[] args) {
-getStats(args);
+    public static void main(String[] args) {
+
+        
+        getStats(args);
           System.out.println("Mean value is: " + mean (args) );
           System.out.println("Median value is: " + median(args));
           System.out.println("Modal value is: " + mode(args));
@@ -42,6 +44,7 @@ return median (x);
     
     //Calculating median from array
     public static int median(int[] a) {
+    java.util.Arrays.sort(a);
     int midSum = a.length/2;
     if (a.length%2 == 1) {
         return a[midSum];
