@@ -1,27 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package normal;
 
+package normal;
 import java.io.*;
 import java.util.HashMap;
 
-
 /**
- *
  * @author Andrew
-
-
      */
  public class Normal {
  public static void main(String[] args) {
-
+//Initialize score variables
     double seScore = 0;
     double accounScore = 0;
     double quantScore = 0;
     double archScore = 0;
+  //Create hashmaps for normalization categories  
    HashMap seNorm = new HashMap();  
    seNorm.put("software engineer", 0.9);
    seNorm.put("software", 0.45);
@@ -39,7 +31,9 @@ import java.util.HashMap;
    HashMap archiNorm = new HashMap();
    archiNorm.put("architect", 0.9);
    
+
    
+   //Get input string to check for normalization
    System.out.println("Please enter title to check for normalisation");
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(isr);
@@ -55,14 +49,14 @@ import java.util.HashMap;
         
             System.out.println("An input error has occured");
                 }
+   
+     //Check to see if entered value is in normalised categories and if so get score for match   
     if (seNorm.containsKey(normal)){
         seScore = (double) seNorm.get(normal);
-       
-    }
+    }  
     else if (quantNorm.containsKey(normal)){
         quantScore = (double) quantNorm.get(normal);
     }
-    
      else if (accNorm.containsKey(normal)){
         accounScore = (double) accNorm.get(normal);
     }
@@ -74,32 +68,7 @@ import java.util.HashMap;
         return;
     }
     
-    
-    /*if (normal.contains("architect")){
-        archScore =archScore +1;
-    }
-    if (normal.contains("accountant")){
-        accounScore =accounScore +1;
-    }if (normal.contains("Engineer")&& normal.contains("software")){
-        seScore = seScore +1;
-    }
-    
-    else if (normal.contains("engineer")|| normal.contains("software")){
-        seScore =seScore +0.5;}
-    
-    if (normal.contains("quantity")&& normal.contains("surveyor")){
-        quantScore =quantScore +1;
-    }
-    
-    else if (normal.contains("quantity")|| normal.contains("surveyor")){
-        quantScore =quantScore +0.5;}
-    
-
-    else {
-        System.out.println("No match found");
-        return;
-    }
-    */
+    //Check for largest score and return appropriate match     
     if (seScore > quantScore && seScore > archScore && seScore > accounScore){
         System.out.println("Normalisation is Software Engineer");
     }
@@ -108,19 +77,14 @@ import java.util.HashMap;
     }
     else if (archScore > seScore && archScore> quantScore && archScore> accounScore){
         System.out.println("Normalisation is Architect");
-    
- 
     }
     else if (accounScore > seScore && accounScore> quantScore && accounScore> archScore){
         System.out.println("Normalisation is Accountant");
-    
     }
-            
     else {
         System.out.println("No normalisation found, has similarities with more than one type");
     }
-
-            
+       
             }
 }
 

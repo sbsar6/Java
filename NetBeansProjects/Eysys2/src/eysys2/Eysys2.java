@@ -16,23 +16,19 @@ public class Eysys2 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-            int[] numbers = new int[500];
-          for(int i = 1; i<numbers.length; i++){ numbers[i] = randomFill();}
-          System.out.println("My Big Array contains" + Arrays.toString(numbers));
-          System.out.println("The total amount of numbers in My Big Array is: " + numbers.length);
-          System.out.println("Total sum of My Big Array is: " + IntStream.of(numbers).sum());
-          System.out.println("Mean value is: " + mean(numbers));
-          System.out.println("Median value is: " + median(numbers));
-          System.out.println("Modal value is: " + mode(numbers));
-          System.out.println("Range value is: " + range(numbers));
+    public static void main(int[] args) {
+getStats(args);
+          System.out.println("Mean value is: " + mean (args) );
+          System.out.println("Median value is: " + median(args));
+          System.out.println("Modal value is: " + mode(args));
+          System.out.println("Range value is: " + range(args));
 } 
     //Calculating mean from array
-      public static int randomFill(){
+      public static int getStats(int []x){
+return mean (x);
+return median (x);
 
-    Random rand = new Random();
-    int randomNum = rand.nextInt(1001);
-    return randomNum;
+            
       }
       
       public static int mean(int[] a) {
