@@ -1,19 +1,21 @@
 
 package normal;
+
 import java.io.*;
 import java.util.HashMap;
 
 /**
  * @author Andrew
+
      */
  public class Normal {
  public static void main(String[] args) {
-//Initialize score variables
+//initalize scores
     double seScore = 0;
     double accounScore = 0;
     double quantScore = 0;
     double archScore = 0;
-  //Create hashmaps for normalization categories  
+//create hashmaps for normalization testing
    HashMap seNorm = new HashMap();  
    seNorm.put("software engineer", 0.9);
    seNorm.put("software", 0.45);
@@ -31,9 +33,7 @@ import java.util.HashMap;
    HashMap archiNorm = new HashMap();
    archiNorm.put("architect", 0.9);
    
-
-   
-   //Get input string to check for normalization
+ //get string to test for normalization  
    System.out.println("Please enter title to check for normalisation");
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(isr);
@@ -49,26 +49,28 @@ import java.util.HashMap;
         
             System.out.println("An input error has occured");
                 }
-   
-     //Check to see if entered value is in normalised categories and if so get score for match   
-    if (seNorm.containsKey(normal)){
+
+  //assign scores if relevant key present      
+        if (seNorm.containsKey(normal)){
         seScore = (double) seNorm.get(normal);
-    }  
-    else if (quantNorm.containsKey(normal)){
-        quantScore = (double) quantNorm.get(normal);
-    }
-     else if (accNorm.containsKey(normal)){
-        accounScore = (double) accNorm.get(normal);
-    }
-     else if (archiNorm.containsKey(normal)){
-        archScore = (double) archiNorm.get(normal);
-    }
-    else {
-        System.out.println("No match found");
-        return;
-    }
+       
+        }
+        else if (quantNorm.containsKey(normal)){
+          quantScore = (double) quantNorm.get(normal);
+        }
     
-    //Check for largest score and return appropriate match     
+        else if (accNorm.containsKey(normal)){
+          accounScore = (double) accNorm.get(normal);
+        }
+        else if (archiNorm.containsKey(normal)){
+          archScore = (double) archiNorm.get(normal);
+        }
+        else {
+            System.out.println("No match found");
+            return;
+        }
+    
+    // Determine highest score and return normalisation
     if (seScore > quantScore && seScore > archScore && seScore > accounScore){
         System.out.println("Normalisation is Software Engineer");
     }
@@ -80,7 +82,7 @@ import java.util.HashMap;
     }
     else if (accounScore > seScore && accounScore> quantScore && accounScore> archScore){
         System.out.println("Normalisation is Accountant");
-    }
+    }     
     else {
         System.out.println("No normalisation found, has similarities with more than one type");
     }

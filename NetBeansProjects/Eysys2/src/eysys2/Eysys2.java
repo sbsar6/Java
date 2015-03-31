@@ -1,48 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package eysys2;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.IntStream;
 /**
- *
  * @author Andrew
  */
 public class Eysys2 {
 
-    /**
-     * @param args the command line arguments
-     */
+ 
     public static void main(String[] args) {
-     if (args!= null){
+    //convert to int array if run from argument line
+        
+        if (args!= null){
          int[] a = new int[args.length];
          for (int i = 0; i < args.length; i++){
-    a[i] = Integer.parseInt(args[i]);
-             System.out.println(Arrays.toString(a));
-    getStats(a);
-     } 
-
-     }
-     
-        
+            a[i] = Integer.parseInt(args[i]); 
+            } 
+        getStats(a); 
+     }    
           
 } 
-    //Calculating mean from array
+   //creating getStats method to run on input arrays
       public static int getStats(int[]a){
-   HashMap stats = new HashMap();  
+        HashMap stats = new HashMap();  
    stats.put("Mean value is ", mean(a));
    stats.put("Median value is ", median(a));
    stats.put("Modal value is ", mode(a));
    stats.put("Range value is " , range(a));
    
-   System.out.println(stats); 
+   System.out.println(stats.toString()); 
         return 0;
       }
       
+     //Calculating mean from array  
       public static int mean(int[] a) {
  
      int meanSum = 0;
@@ -94,7 +86,7 @@ public class Eysys2 {
         //return min;
         //return max;
         return (max - min) + 1;
-          // TODO code application logic here
+        
     }
     
 }
