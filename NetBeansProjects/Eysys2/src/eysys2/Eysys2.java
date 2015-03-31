@@ -5,6 +5,7 @@
  */
 package eysys2;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.IntStream;
 /**
@@ -17,20 +18,29 @@ public class Eysys2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+     if (args!= null){
+         int[] a = new int[args.length];
+         for (int i = 0; i < args.length; i++){
+    a[i] = Integer.parseInt(args[i]);
+             System.out.println(Arrays.toString(a));
+    getStats(a);
+     } 
 
+     }
+     
         
-        getStats(args);
-          System.out.println("Mean value is: " + mean (args) );
-          System.out.println("Median value is: " + median(args));
-          System.out.println("Modal value is: " + mode(args));
-          System.out.println("Range value is: " + range(args));
+          
 } 
     //Calculating mean from array
-      public static int getStats(int []x){
-return mean (x);
-return median (x);
-
-            
+      public static int getStats(int[]a){
+        HashMap stats = new HashMap();  
+   stats.put("Mean value is ", mean(a));
+   stats.put("Median value is ", median(a));
+   stats.put("Modal value is ", mode(a));
+   stats.put("Range value is " , range(a));
+   
+   System.out.println(stats); 
+        return 0;
       }
       
       public static int mean(int[] a) {
@@ -44,7 +54,6 @@ return median (x);
     
     //Calculating median from array
     public static int median(int[] a) {
-    java.util.Arrays.sort(a);
     int midSum = a.length/2;
     if (a.length%2 == 1) {
         return a[midSum];
