@@ -62,23 +62,7 @@ public class PictureFrame extends JFrame {
     
     private String getImageFile(){
         
-       /* String userhome = System.getProperty("user.home");
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file only","JPEG file", "jpg", "jpeg","gif", "png");
-            JFileChooser fileChooser = new JFileChooser(userhome+"\\Pictures");
-            ImagePreview preview = new ImagePreview(fileChooser);
-            fileChooser.addPropertyChangeListener(preview);
-            fileChooser.setAccessory(preview);
-            fileChooser.setFileFilter(filter);
-            fileChooser.setAcceptAllFileFilterUsed(false);
-            int returnValue = fileChooser.showOpenDialog(null);
-            if(returnValue == JFileChooser.APPROVE_OPTION){
-                
-                File file = fileChooser.getSelectedFile();
-                updateImage(file);
-                BufferedImage image = ImageIO.read(file);
-                Dimension sz = new Dimension(300,300);
-                setPreferredSize(sz);
-        */
+
         String userhome = System.getProperty("user.home");
         JFileChooser fc = new JFileChooser(userhome+"\\Pictures");
         ImagePreview preview = new ImagePreview(fc);
