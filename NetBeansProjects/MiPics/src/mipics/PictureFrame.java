@@ -28,7 +28,7 @@ public class PictureFrame extends JFrame {
     private JTree tree2;
 
     public static void main (String [] args){
-        
+    
         new PictureFrame();
        
     }
@@ -126,9 +126,9 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
      */
     public void addTag() {
         
-        String tag = textTag.getText();
-        //String fileName = getImageFile(file); 
-       // this.tag = tag.setValue(gettag);
+        String gettag = textTag.getText();
+       String fileName = getImageFile(file); 
+       tag = tag.setValue(gettag);
         if (tag.length() ==0)
         {
             JOptionPane.showMessageDialog(PictureFrame.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
@@ -136,10 +136,10 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
         }
     else
         {
-            System.out.println(tag); 
+            System.out.println(gettag); 
             DefaultMutableTreeNode root1, tag1, pic;
             root1 = new DefaultMutableTreeNode("Tags");
-           tag1 = makeShow(tag, root1);   
+           tag1 = makeShow(gettag, root1);   
             System.out.println(tag1);
            pic = makeShow("New Pic", tag1); 
            tree2 = new JTree(root1);
