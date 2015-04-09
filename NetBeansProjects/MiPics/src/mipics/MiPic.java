@@ -13,6 +13,8 @@ import java.io.IOException;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 import mipics.ImagePreview;
 
 
@@ -39,10 +41,13 @@ public class MiPic extends javax.swing.JFrame {
     private void initComponents() {
 
         jSP = new javax.swing.JScrollPane();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        frame = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        textTag = new javax.swing.JTextField();
+        getTag = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        tree2 = new javax.swing.JTree();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMI_Open = new javax.swing.JMenuItem();
@@ -50,16 +55,56 @@ public class MiPic extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jSP.setViewportView(jLabel1);
+        jButton2.setText("Open Photo");
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        textTag.setText("jTextField1");
+
+        getTag.setText("Tag Photo");
+        getTag.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                getTagActionPerformed(evt);
             }
         });
 
-        jScrollPane1.setViewportView(jTree1);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textTag, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getTag)
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(textTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(getTag))
+                .addGap(0, 22, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frameLayout = new javax.swing.GroupLayout(frame);
+        frame.setLayout(frameLayout);
+        frameLayout.setHorizontalGroup(
+            frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        frameLayout.setVerticalGroup(
+            frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, frameLayout.createSequentialGroup()
+                .addGap(0, 241, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jSP.setViewportView(frame);
+
+        jScrollPane1.setViewportView(tree2);
 
         jMenu1.setText("File");
 
@@ -84,20 +129,17 @@ public class MiPic extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSP, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSP)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         pack();
@@ -134,12 +176,14 @@ JLabel jlab = new JLabel();
             if(file == null) {
             return;
         }
-        JFrame frame = new JFrame();
-        frame.setSize(600, 600);
+        JFrame frame1 = new JFrame();
+        frame1.setSize(300, 300);
         JLabel label = new JLabel(new ImageIcon(image));
-        frame.add(label);
-        frame.setVisible(true);
+        frame1.add(label);
+        frame1.setVisible(true);
+        frame.add(frame1);
         img = ImageIO.read(file);
+        img = img.getScaledInstance(300, -1, Image.SCALE_SMOOTH);
         repaint();
         
                
@@ -147,7 +191,13 @@ JLabel jlab = new JLabel();
         }
         catch (HeadlessException | IOException e) {System.out.println(e);}
     } 
-     
+   public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode parent)
+    {
+        DefaultMutableTreeNode show;
+        show = new DefaultMutableTreeNode(title);
+        parent.add(show);
+        return show;
+    }  
         
 public void propertyChange(PropertyChangeEvent evt) {
         
@@ -219,13 +269,48 @@ public void propertyChange(PropertyChangeEvent evt) {
         
     }//GEN-LAST:event_jMI_OpenActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    //to do code
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void getTagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getTagActionPerformed
+        addTag();
+    }//GEN-LAST:event_getTagActionPerformed
 /*
     /**
      * @param args the command line arguments
      */
+    private void addTag() {
+        
+        String tag = textTag.getText();
+        
+        if (tag.length() ==0)
+        {
+            JOptionPane.showMessageDialog(MiPic.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+    else
+        {
+            System.out.println(tag); 
+            DefaultMutableTreeNode root1, tag1, pic;
+            root1 = new DefaultMutableTreeNode("Tags");
+           tag1 = makeShow(tag, root1);   
+            System.out.println(tag1);
+           pic = makeShow("New Pic", tag1); 
+           tree2 = new JTree(root1);
+           tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+           tree2.setVisibleRowCount(12);
+          // tree2.addTreeSelectionListener(e -> tree1Changed());
+         
+           JPanel panel2 = new JPanel ();
+           JScrollPane scroll = new JScrollPane(tree2);
+           panel2.add(scroll);
+       
+           this.add(panel2);
+           this.validate();
+           this.repaint();
+        
+        
+    }
+    
+    
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -262,15 +347,18 @@ public void propertyChange(PropertyChangeEvent evt) {
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel frame;
+    private javax.swing.JButton getTag;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenuItem jMI_Open;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jSP;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JTextField textTag;
+    private javax.swing.JTree tree2;
     // End of variables declaration//GEN-END:variables
 
 }

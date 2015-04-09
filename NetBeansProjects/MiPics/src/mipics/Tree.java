@@ -7,6 +7,7 @@ package mipics;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.HashMap;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 /**
@@ -95,8 +96,9 @@ public class Tree extends JFrame {
     }
     
     private void addTag() {
- 
+        
         String tag = textTag.getText();
+        
         if (tag.length() ==0)
         {
             JOptionPane.showMessageDialog(Tree.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);

@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 /**
  *
  * @author Andrew
@@ -20,7 +22,10 @@ public class PictureFrame extends JFrame {
     Image img;
     JButton getPictureButton;
     JButton getTag;
-              
+    private JLabel showName;
+
+    private JTextField textTag; 
+    private JTree tree2;
 
     public static void main (String [] args){
         
@@ -41,6 +46,8 @@ public class PictureFrame extends JFrame {
         getPictureButton.addActionListener(e -> getPictureButtonClick() );
         buttonPanel.add(getPictureButton);
               
+        textTag = new JTextField(10);
+        buttonPanel.add(textTag);
         getTag = new JButton ("Add picture tags");
         getTag.addActionListener(e -> addTag());
         buttonPanel.add(getTag);
@@ -60,19 +67,21 @@ public class PictureFrame extends JFrame {
         }
     }
     
-    private String getImageFile(){
+    public String getImageFile(){
         
 
         String userhome = System.getProperty("user.home");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image file only","JPEG file", "jpg", "jpeg","gif", "png");    
         JFileChooser fc = new JFileChooser(userhome+"\\Pictures");
         ImagePreview preview = new ImagePreview(fc);
         fc.addPropertyChangeListener(preview);
         fc.setAccessory(preview);
-        fc.setFileFilter(new ImageFilter());
+        fc.setFileFilter(filter);
+        fc.setAcceptAllFileFilterUsed(false);
         int result = fc.showOpenDialog(null);
-        File file = null;
+        
         if (result == JFileChooser.APPROVE_OPTION){
-            file = fc.getSelectedFile();
+            File file = fc.getSelectedFile();
             return file.getPath();
         }
         else
@@ -80,9 +89,6 @@ public class PictureFrame extends JFrame {
         
     }
 
-    private void addTag() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
      private class PicturePanel extends JPanel{
          public void paint(Graphics g){
@@ -91,19 +97,67 @@ public class PictureFrame extends JFrame {
          
      }
 
-     private class ImageFilter extends javax.swing.filechooser.FileFilter{
-         public boolean accept (File f){
-             if (f.isDirectory())
-                 return true;
-             String name = f.getName();
-             if (name.matches(".*((.jpg)|(.gif)|(.png))"))
-                     return true;
-             else
-             return false;
-             
-         }
          public String getDescription(){
              return "Image files (*.jpg, *.gif, *.png)";
          }
-     }
+     
+public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode parent)
+    {
+        DefaultMutableTreeNode show;
+        show = new DefaultMutableTreeNode(title);
+        parent.add(show);
+        return show;
+    }
+ 
+    public void tree1Changed()
+    {
+        Object o =tree2.getLastSelectedPathComponent();
+        DefaultMutableTreeNode show;
+        show = (DefaultMutableTreeNode) o;
+        String title = (String) show.getUserObject();
+        showName.setText(title);
+    }
+   
+	
+
+    /**
+     *
+     * @param tag
+     */
+    public void addTag() {
+        
+        String tag = textTag.getText();
+        //String fileName = getImageFile(file); 
+       // this.tag = tag.setValue(gettag);
+        if (tag.length() ==0)
+        {
+            JOptionPane.showMessageDialog(PictureFrame.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+    else
+        {
+            System.out.println(tag); 
+            DefaultMutableTreeNode root1, tag1, pic;
+            root1 = new DefaultMutableTreeNode("Tags");
+           tag1 = makeShow(tag, root1);   
+            System.out.println(tag1);
+           pic = makeShow("New Pic", tag1); 
+           tree2 = new JTree(root1);
+           tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+           tree2.setVisibleRowCount(12);
+           tree2.addTreeSelectionListener(e -> tree1Changed());
+         
+           JPanel panel2 = new JPanel ();
+           JScrollPane scroll = new JScrollPane(tree2);
+           panel2.add(scroll);
+       
+           this.add(panel2, BorderLayout.WEST);
+           this.validate();
+           this.repaint();
+        
+        
+    }
+    }
+   
 }
+
