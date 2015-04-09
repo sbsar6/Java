@@ -26,6 +26,7 @@ public class PictureFrame extends JFrame {
 
     private JTextField textTag; 
     private JTree tree2;
+    private File file;
 
     public static void main (String [] args){
     
@@ -81,7 +82,7 @@ public class PictureFrame extends JFrame {
         int result = fc.showOpenDialog(null);
         
         if (result == JFileChooser.APPROVE_OPTION){
-            File file = fc.getSelectedFile();
+            this.file = fc.getSelectedFile();
             return file.getPath();
         }
         else
@@ -127,9 +128,12 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
     public void addTag() {
         
         String gettag = textTag.getText();
-       String fileName = getImageFile(file); 
-       tag = tag.setValue(gettag);
-        if (tag.length() ==0)
+        Tag tag = new Tag(gettag, file.toString());
+        System.out.println(tag.getType());
+        System.out.println(file);       
+//String fileName = getImageFile(file); 
+     //  tag = tag.setValue(gettag);
+        if (gettag.length() ==0)
         {
             JOptionPane.showMessageDialog(PictureFrame.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
             
@@ -139,9 +143,8 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
             System.out.println(gettag); 
             DefaultMutableTreeNode root1, tag1, pic;
             root1 = new DefaultMutableTreeNode("Tags");
-           tag1 = makeShow(gettag, root1);   
-            System.out.println(tag1);
-           pic = makeShow("New Pic", tag1); 
+           tag1 = makeShow(tag.getType(), root1);   
+           pic = makeShow(tag.getValue(), tag1); 
            tree2 = new JTree(root1);
            tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
            tree2.setVisibleRowCount(12);
@@ -149,6 +152,7 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
          
            JPanel panel2 = new JPanel ();
            JScrollPane scroll = new JScrollPane(tree2);
+           scroll.setPreferredSize(new Dimension(150, 200));
            panel2.add(scroll);
        
            this.add(panel2, BorderLayout.WEST);

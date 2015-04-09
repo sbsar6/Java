@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.util.HashMap;
 import javax.swing.tree.*;
 import javax.swing.event.*;
+import java.awt.Dimension;
+
 /**
  *
  * @author Andrew
@@ -78,20 +80,20 @@ public class Tree extends JFrame {
         this.setVisible(true);
     }
     
-    public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode parent)
+    public DefaultMutableTreeNode addPhoto(String title, DefaultMutableTreeNode parent)
     {
-        DefaultMutableTreeNode show;
-        show = new DefaultMutableTreeNode(title);
-        parent.add(show);
-        return show;
+        DefaultMutableTreeNode addT;
+        addT = new DefaultMutableTreeNode(title);
+        parent.add(addT);
+        return addT;
     }
  
     public void tree1Changed()
     {
         Object o =tree2.getLastSelectedPathComponent();
-        DefaultMutableTreeNode show;
-        show = (DefaultMutableTreeNode) o;
-        String title = (String) show.getUserObject();
+        DefaultMutableTreeNode addT;
+        addT = (DefaultMutableTreeNode) o;
+        String title = (String) addT.getUserObject();
         showName.setText(title);
     }
     
@@ -109,17 +111,22 @@ public class Tree extends JFrame {
             System.out.println(tag); 
             DefaultMutableTreeNode root1, tag1, pic;
             root1 = new DefaultMutableTreeNode("Tags");
-           tag1 = makeShow(tag, root1);   
+           tag1 = addPhoto(tag, root1);   
             System.out.println(tag1);
-           pic = makeShow("New Pic", tag1); 
+           pic = addPhoto("New Pic", tag1); 
            tree2 = new JTree(root1);
+           
            tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-           tree2.setVisibleRowCount(12);
+           tree2.setVisibleRowCount(18);
            tree2.addTreeSelectionListener(e -> tree1Changed());
          
            JPanel panel2 = new JPanel ();
+           panel2.setSize(250,200);
            JScrollPane scroll = new JScrollPane(tree2);
+           scroll.setPreferredSize(new Dimension(200, 200));
+         
            panel2.add(scroll);
+           
        
            this.add(panel2);
            this.validate();
