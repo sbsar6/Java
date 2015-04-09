@@ -29,7 +29,7 @@ public class Tag {
 	/**
 	 * 
 	 */
-	
+	private static final long serialVersionUID = 3223704828835351425L;
 	private String tagType;	
 	private String value;
 
