@@ -10,25 +10,7 @@ package mipics;
  * @author Andrew
  */
 public class Tag {
-   
-
-/**
- * 
- * The tag object is used to represent an appearnce of a location or a person or common things in
- * multiple photos.
- * The Tag object has an ID field, a value and type. 
- * The value field is the different value a tag could be used for, such as the name of a location of where the photo was taken
- * or a name of the person tagged in the photo.
- * The type field is the different usages of a tag such as "location" or "person"
- * The tagID field is an ID unique to every tag to prevent duplicates.
- * 
-
- */
-
-	
-	/**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 3223704828835351425L;
 	private String tagType;	
 	private String value;
