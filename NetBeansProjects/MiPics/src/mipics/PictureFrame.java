@@ -233,8 +233,9 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
     else
         {
             System.out.println(getTagName); 
-           this.model.insertNodeInto(new DefaultMutableTreeNode(getTagName), this.rootNode, this.rootNode.getChildCount());    
-
+          DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
+            this.model.insertNodeInto(getTagTree, this.rootNode, this.rootNode.getChildCount());    
+           this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
           // tag1 = makeShow(tag.getType(), rootNode);   
          //  pic = makeShow(tag.getValue(), tag1); 
            //tree2 = new JTree(root1);
