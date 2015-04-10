@@ -36,7 +36,7 @@ public class PictureFrame extends JFrame {
     private DefaultMutableTreeNode tag1, pic;
     
     public static void main (String [] args){
-    
+
         new PictureFrame();
        
     }
@@ -165,7 +165,7 @@ private DefaultMutableTreeNode getTagTree (){
     
     
     
-    DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Photo Albums");
+    this.rootNode = new DefaultMutableTreeNode("Photo Albums");
     return rootNode;
 }
     public void tree1Changed()
