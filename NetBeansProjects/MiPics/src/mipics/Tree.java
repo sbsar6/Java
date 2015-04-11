@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 /**
  *
@@ -108,14 +109,62 @@ public class Tree extends JFrame {
         }
     else
         {
+        ArrayList<String> keyList = new ArrayList<String>();
+        ArrayList<String> arrayList1 = new ArrayList<String>();
+        ArrayList<String> arrayList2 = new ArrayList<String>();
+        ArrayList<String> tempVals = new ArrayList<String>();
+        arrayList1.add("holiday.jpg");
+        arrayList1.add("holiday2.jpg");
+        String name1 = "Holidays";
+        String name2 = "Trees";
+        
+        keyList.add(name1);
+        keyList.add(name2);
+        HashMap namesToNodes= new HashMap();
+        namesToNodes.put(name1, arrayList1);
+        arrayList2.add("Tree1.jpg");
+        namesToNodes.put(name2, arrayList2);
+        
+        System.out.println(keyList);
+            
             System.out.println(tag); 
-            DefaultMutableTreeNode root1, tag1, pic;
+            DefaultMutableTreeNode root1, tag1, tempTag, pic;
             root1 = new DefaultMutableTreeNode("Tags");
-           tag1 = addPhoto(tag, root1);   
+            System.out.println(namesToNodes.size());
+            System.out.println(namesToNodes.values());
+           
+          //  System.out.println(namesToNodes.keySet(0));
+            for(int i = 0; i< namesToNodes.size();i++){
+                System.out.println(keyList.get(i));
+                DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(keyList.get(i));
+                System.out.println(getTagTree);
+                tempTag = addPhoto(keyList.get(i), root1);   
+                String tempString = namesToNodes.get(keyList.get(i)).toString();
+                System.out.println(tempString);
+                String[] tempString2 = tempString.split("");
+                System.out.println(tempString2.length);
+                System.out.println(tempString2.toString());
+                tempVals.add(namesToNodes.get(keyList.get(i)).toString());
+                System.out.println(tempVals);
+                tempVals.spliterator();
+                tempVals.spliterator();
+                System.out.println(tempVals);
+                System.out.println(tempVals.size());
+//this.model.insertNodeInto(getTagTree, root1, root1.getChildCount());   
+             //need to insert inner loop to add values under parent nodes
+             //  ArrayList<String> tempList = new ArrayList<String>();
+              // tempList = (ArrayList<String>) namesToNodes.values();
+        //   for(int j = 0 ; j< namesToNodes.get(i).;i++){
+            }
+           //this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
+           
+           
+            
+            tag1 = addPhoto(tag, root1);   
             System.out.println(tag1);
            pic = addPhoto("New Pic", tag1); 
-           tree2 = new JTree(root1);
            
+           tree2 = new JTree(root1);
            tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
            tree2.setVisibleRowCount(18);
            tree2.addTreeSelectionListener(e -> tree1Changed());

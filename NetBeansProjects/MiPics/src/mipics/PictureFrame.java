@@ -10,7 +10,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -19,9 +22,10 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author Andrew
  */
-public class PictureFrame extends JFrame {
+public class PictureFrame extends JFrame implements TreeSelectionListener {
     
     Image img;
+    Image iconImage;
     JButton getPictureButton;
     JButton getTag;
     private JLabel showName;
@@ -34,28 +38,35 @@ public class PictureFrame extends JFrame {
     private File file;
     private HashMap tagList; 
     private DefaultMutableTreeNode tag1, pic;
+    private JPanel panel2;
     
     public static void main (String [] args){
 
         new PictureFrame();
        
     }
+    private String nodeString;
     
     public PictureFrame(){
+       
         this.setSize(600,600);
-        this.setTitle("Picture Viewer");
+        this.setTitle("Mi Pics");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        DefaultMutableTreeNode tagNode = getTagTree();
+       
+       DefaultMutableTreeNode tagNode = getTagTree();
         model = new DefaultTreeModel(tagNode);
         tree = new JTree(model);
-        JPanel panel2 = new JPanel ();
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.addTreeSelectionListener(this);
+       
         JScrollPane scroll = new JScrollPane(tree);
         scroll.setPreferredSize(new Dimension(150, 200));
+        JPanel panel2 = new JPanel();
         panel2.add(scroll);
-       
         this.add(panel2, BorderLayout.WEST);
-        //this.validate();
+        
+
+          //this.validate();
           // this.repaint();
         
         JPanel picPanel = new PicturePanel();
@@ -80,17 +91,18 @@ public class PictureFrame extends JFrame {
         this.setVisible(true);
         
     }
-    
+
     public final void getPictureButtonClick(){
-        String file = getImageFile();
+     
+         String file = getImageFile();
         if (file != null){
             Toolkit kit = Toolkit.getDefaultToolkit();
             img = kit.getImage(file);
             img = img.getScaledInstance(300, -1, Image.SCALE_SMOOTH);
             this.repaint();
+            
         }
     }
-    
     public String getImageFile(){
         
 
@@ -112,7 +124,20 @@ public class PictureFrame extends JFrame {
             return null;
         
     }
-
+  public void valueChanged(TreeSelectionEvent e) {
+    DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+    
+    if (node == null) return;
+    
+    Object nodeInfo = node.getUserObject();
+    
+    this.nodeString = nodeInfo.toString();
+    if (node.isLeaf()){
+        System.out.println("Is leaf");
+        System.out.println( nodeInfo.toString());
+        // addIcon();
+    }
+  }
 
      private class PicturePanel extends JPanel{
          public void paint(Graphics g){
@@ -134,7 +159,18 @@ public DefaultMutableTreeNode makeShow(String title, DefaultMutableTreeNode pare
     }
  
 private DefaultMutableTreeNode getTagTree (){
-  /*  while ((st = reader.readLine()) != null) {
+     
+    this.rootNode = new DefaultMutableTreeNode("Photo Albums");
+    return rootNode;
+    //try{ //catch errors if any
+           /* String text;
+            FileReader fr=new FileReader("albumfiles.txt");
+            BufferedReader br=new BufferedReader(fr);
+            while ((text=br.readLine())!=null){
+                        //Read  lines of string from the file using readLine() method
+                listmodel.addElement(text);
+                int i = 0;
+                String st = "";          
                 StringTokenizer stoke = new StringTokenizer(st);
                 String sno = stoke.nextToken();
                 String grandChild_name = stoke.nextToken();
@@ -160,13 +196,15 @@ private DefaultMutableTreeNode getTagTree (){
                     NodeArr[i] = tempnode1;
                     i++;
                 }
-            }
-    */
+            
+             }
+            br.close();//close file using close() method
+            fr.close();    
+     */
+//} catch(Exception ie){System.out.println("IO problem!");}
+  
     
-    
-    
-    this.rootNode = new DefaultMutableTreeNode("Photo Albums");
-    return rootNode;
+ 
 }
     public void tree1Changed()
     {
@@ -187,7 +225,11 @@ private DefaultMutableTreeNode getTagTree (){
      * @param tag
      */
     public void addTag() {
-      
+        if (file == null)
+        {
+            JOptionPane.showMessageDialog(PictureFrame.this, "Please open a photo to tag first","Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         String getTagName = textTag.getText();
         Tag tag = new Tag(getTagName, file.toString());
         DefaultMutableTreeNode parent = getSelectedNode();
@@ -195,7 +237,7 @@ private DefaultMutableTreeNode getTagTree (){
 /*
    public java.util.List<TreePath> find(DefaultMutableTreeNode root, Set<String> s) {
         java.util.List<TreePath> paths = new ArrayList<>();
-        @SuppressWarnings("unchecked")
+@SuppressWarnings("unchecked")
         Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
         while (e.hasMoreElements()) {
             DefaultMutableTreeNode node = e.nextElement();
@@ -218,13 +260,16 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
         //    model.insertNodeInto(new DefaultMutableTreeNode(getTagName),parent, parent.getChildCount());
        // }
         
-        
+
         
         //tagList.put(tag.getType(), tag.getValue());
-        System.out.println(tag.getType());
-        System.out.println(file);       
+ 
+               
 //String fileName = getImageFile(file); 
      //  tag = tag.setValue(gettag);
+        
+
+        
         if (getTagName.length() ==0)
         {
             JOptionPane.showMessageDialog(PictureFrame.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
@@ -234,9 +279,11 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
         {
             System.out.println(getTagName); 
           DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
-            this.model.insertNodeInto(getTagTree, this.rootNode, this.rootNode.getChildCount());    
+            this.model.insertNodeInto(getTagTree, this.rootNode, this.rootNode.getChildCount());   
+           
            this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
-          // tag1 = makeShow(tag.getType(), rootNode);   
+           
+// tag1 = makeShow(tag.getType(), rootNode);   
          //  pic = makeShow(tag.getValue(), tag1); 
            //tree2 = new JTree(root1);
            //tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -259,7 +306,22 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
        return (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
        
    }
-   
+   private void addIcon(){
+      /* JPanel panel3 = new JPanel();
+       Toolkit kit = Toolkit.getDefaultToolkit();
+       iconImg = kit.getImage(this.nodeString);
+            img = img.getScaledInstance(300, -1, Image.SCALE_SMOOTH);
+            this.repaint();
+       
+       ImageIcon picIcon = new ImageIcon(this.nodeString);
+       
+
+       JLabel pIcon = new JLabel(picIcon);
+       panel3.add(pIcon);
+       this.add(panel3, BorderLayout.EAST);
+       this.validate();
+       this.repaint();
+   */}
    private void changeTag(){
        DefaultMutableTreeNode selectedNode = getSelectedNode();
        if (selectedNode == null){
