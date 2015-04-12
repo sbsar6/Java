@@ -53,7 +53,23 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
         this.setTitle("Mi Pics");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
-       DefaultMutableTreeNode tagNode = getTagTree();
+        try
+        {
+        FileInputStream fis = new FileInputStream("Tree_Save");
+        ObjectInputStream oos= new ObjectInputStream(fis);
+        DefaultTreeModel model = (DefaultTreeModel)oos.readObject();
+        tree = new JTree(model);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.addTreeSelectionListener(this);
+        JScrollPane scroll = new JScrollPane(tree);
+        scroll.setPreferredSize(new Dimension(150, 200));
+        JPanel panel2 = new JPanel();
+        panel2.add(scroll);
+        this.add(panel2, BorderLayout.WEST);
+        }
+        catch(Exception e)
+        {       
+        DefaultMutableTreeNode tagNode = getTagTree();
         model = new DefaultTreeModel(tagNode);
         tree = new JTree(model);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -64,6 +80,8 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
         JPanel panel2 = new JPanel();
         panel2.add(scroll);
         this.add(panel2, BorderLayout.WEST);
+        }
+ 
         
 
           //this.validate();
@@ -126,7 +144,7 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
     }
   public void valueChanged(TreeSelectionEvent e) {
     DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-    
+
     if (node == null) return;
     
     Object nodeInfo = node.getUserObject();
@@ -162,48 +180,7 @@ private DefaultMutableTreeNode getTagTree (){
      
     this.rootNode = new DefaultMutableTreeNode("Photo Albums");
     return rootNode;
-    //try{ //catch errors if any
-           /* String text;
-            FileReader fr=new FileReader("albumfiles.txt");
-            BufferedReader br=new BufferedReader(fr);
-            while ((text=br.readLine())!=null){
-                        //Read  lines of string from the file using readLine() method
-                listmodel.addElement(text);
-                int i = 0;
-                String st = "";          
-                StringTokenizer stoke = new StringTokenizer(st);
-                String sno = stoke.nextToken();
-                String grandChild_name = stoke.nextToken();
-                String child_id = stoke.nextToken();
-                child = new DefaultMutableTreeNode(grandChild_name);
-                if (child_id.equals(tempNode.toString())) {
-                    tempNode.add(child);
-                    NodeArr[i] = child;
-                    i++;
-                }
-                else
-                {
-                    for(int k=0; k<NodeArr.length; k++){
-                        if (NodeArr[k]!=null) 
-                        {
-                            String Nodename = NodeArr[k].toString();
-                            if (Nodename.equals(child_id)){
-                                tempnode1= new DefaultMutableTreeNode(grandChild_name);
-                                NodeArr[k].add(tempnode1);
-                            }
-                        }
-                    }
-                    NodeArr[i] = tempnode1;
-                    i++;
-                }
-            
-             }
-            br.close();//close file using close() method
-            fr.close();    
-     */
-//} catch(Exception ie){System.out.println("IO problem!");}
-  
-    
+   
  
 }
     public void tree1Changed()
@@ -220,10 +197,6 @@ private DefaultMutableTreeNode getTagTree (){
    
 	
 
-    /**
-     *
-     * @param tag
-     */
     public void addTag() {
         if (file == null)
         {
@@ -233,6 +206,7 @@ private DefaultMutableTreeNode getTagTree (){
         String getTagName = textTag.getText();
         Tag tag = new Tag(getTagName, file.toString());
         DefaultMutableTreeNode parent = getSelectedNode();
+        
         //This will get selected node may need to change it to find if You can create a method that will return you all the matching nodes. You can do it by iterating over all the nodes in the tree and check if there names matches the one in the set.
 /*
    public java.util.List<TreePath> find(DefaultMutableTreeNode root, Set<String> s) {
@@ -278,11 +252,24 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
     else
         {
             System.out.println(getTagName); 
-          DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
-            this.model.insertNodeInto(getTagTree, this.rootNode, this.rootNode.getChildCount());   
+        
+            rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
+            System.out.println(rootNode);
+            DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
+            this.model.insertNodeInto(getTagTree, rootNode, rootNode.getChildCount());   
            
            this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
-           
+              try
+        {
+        FileOutputStream fos = new FileOutputStream("Tree_Save");
+        ObjectOutputStream oos= new ObjectOutputStream(fos);
+        oos.writeObject(model);
+        }
+        catch(Exception e)
+        {
+        }
+       // Similarly u can read the fileobject using the follwing code
+        
 // tag1 = makeShow(tag.getType(), rootNode);   
          //  pic = makeShow(tag.getValue(), tag1); 
            //tree2 = new JTree(root1);

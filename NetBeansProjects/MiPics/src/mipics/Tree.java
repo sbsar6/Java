@@ -11,7 +11,12 @@ import java.util.HashMap;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.Dimension;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -67,6 +72,25 @@ public class Tree extends JFrame {
         JScrollPane scroll = new JScrollPane(tree1);
         panel1.add(scroll);
        */
+         try
+        {
+        FileInputStream fis = new FileInputStream("tree2");
+        ObjectInputStream oos= new ObjectInputStream(fis);
+        JTree tree3 = (JTree)oos.readObject();
+        JPanel panel3 = new JPanel ();
+           panel3.setSize(250,200);
+           JScrollPane scroll = new JScrollPane(tree3);
+           scroll.setPreferredSize(new Dimension(200, 200));
+         
+           panel3.add(scroll);
+           
+       
+           this.add(panel3);
+        }
+        catch(Exception e)
+        {
+        }
+         
         JPanel buttonPanel = new JPanel();
         showName = new JLabel();
         //panel1.add(showName);
@@ -109,7 +133,10 @@ public class Tree extends JFrame {
         }
     else
         {
-        ArrayList<String> keyList = new ArrayList<String>();
+        
+  
+            
+            ArrayList<String> keyList = new ArrayList<String>();
         ArrayList<String> arrayList1 = new ArrayList<String>();
         ArrayList<String> arrayList2 = new ArrayList<String>();
         ArrayList<String> tempVals = new ArrayList<String>();
@@ -128,37 +155,44 @@ public class Tree extends JFrame {
         System.out.println(keyList);
             
             System.out.println(tag); 
-            DefaultMutableTreeNode root1, tag1, tempTag, pic;
+            DefaultMutableTreeNode root1, tag1, tempTag,tempTag2, pic;
             root1 = new DefaultMutableTreeNode("Tags");
             System.out.println(namesToNodes.size());
             System.out.println(namesToNodes.values());
            
           //  System.out.println(namesToNodes.keySet(0));
-            for(int i = 0; i< namesToNodes.size();i++){
-                System.out.println(keyList.get(i));
+            for(int i = 0; i< keyList.size();i++){
+              // for(int j = 0; j < columns; j++){// System.out.println(keyList.get(i));
                 DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(keyList.get(i));
-                System.out.println(getTagTree);
+               // System.out.println(getTagTree);
                 tempTag = addPhoto(keyList.get(i), root1);   
-                String tempString = namesToNodes.get(keyList.get(i)).toString();
-                System.out.println(tempString);
-                String[] tempString2 = tempString.split("");
-                System.out.println(tempString2.length);
-                System.out.println(tempString2.toString());
-                tempVals.add(namesToNodes.get(keyList.get(i)).toString());
-                System.out.println(tempVals);
-                tempVals.spliterator();
-                tempVals.spliterator();
-                System.out.println(tempVals);
-                System.out.println(tempVals.size());
+                //DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(albumArray[i]);
+              //  System.out.println(getTagTree);
+                //name1 = Arrays.toString(albumArray[i][j]);
+              //     System.out.println(name1);
+             //   name2 = Arrays.toString(albumArray[j]);
+             //      System.out.println(name2);
+             //   tempTag = addPhoto(name1, root1); 
+             //   tempTag = addPhoto(name2, getTagTree);
+            
+                //tempVals.add(namesToNodes.get(keyList.get(i)).toString());
+                //System.out.println(tempVals);
+               // for(int j = 0 ; j< columns;i++){
+              //   DefaultMutableTreeNode getTagTree2 = new DefaultMutableTreeNode(albumArray[i][j]);
+             //   System.out.println(albumArray[i][j].toString());
+               // tempTag2 = addPhoto(albumArray[i][j].toString(), root1);
+              //  System.out.println(tempVals);
+               // System.out.println(tempVals.size());
 //this.model.insertNodeInto(getTagTree, root1, root1.getChildCount());   
              //need to insert inner loop to add values under parent nodes
              //  ArrayList<String> tempList = new ArrayList<String>();
               // tempList = (ArrayList<String>) namesToNodes.values();
         //   for(int j = 0 ; j< namesToNodes.get(i).;i++){
+            //}
             }
            //this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
            
-           
+          
             
             tag1 = addPhoto(tag, root1);   
             System.out.println(tag1);
@@ -168,7 +202,25 @@ public class Tree extends JFrame {
            tree2.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
            tree2.setVisibleRowCount(18);
            tree2.addTreeSelectionListener(e -> tree1Changed());
-         
+         try
+        {
+        FileOutputStream fos = new FileOutputStream("tree2");
+        ObjectOutputStream oos= new ObjectOutputStream(fos);
+        oos.writeObject(tree2);
+        }
+        catch(Exception e)
+        {
+        }
+       // Similarly u can read the fileobject using the follwing code
+        try
+        {
+        FileInputStream fis = new FileInputStream("tree2");
+        ObjectInputStream oos= new ObjectInputStream(fis);
+        JTree tree3 = (JTree)oos.readObject();
+        }
+        catch(Exception e)
+        {
+        }
            JPanel panel2 = new JPanel ();
            panel2.setSize(250,200);
            JScrollPane scroll = new JScrollPane(tree2);
