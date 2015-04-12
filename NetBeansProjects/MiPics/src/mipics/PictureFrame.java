@@ -252,13 +252,14 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
     else
         {
             System.out.println(getTagName); 
-        
+       
             rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
             System.out.println(rootNode);
             DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
+           
             this.model.insertNodeInto(getTagTree, rootNode, rootNode.getChildCount());   
            
-           this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
+          this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
               try
         {
         FileOutputStream fos = new FileOutputStream("Tree_Save");
