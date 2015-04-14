@@ -17,13 +17,13 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 /**
  *
  * @author Andrew
  */
-public class PictureFrame extends JFrame implements TreeSelectionListener {
+public class PictureFrametestsave extends JFrame implements TreeSelectionListener {
     
     Image img;
     Image iconImage;
@@ -34,62 +34,78 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
     private JTextField textTag; 
     private JTree tree;
     private DefaultTreeModel model;
-    private DefaultMutableTreeNode rootNode, cat;
+    private DefaultTreeModel innerModel;
+    private DefaultMutableTreeNode rootNode;
     
     private File file;
     private HashMap tagList; 
-    private DefaultMutableTreeNode tag1, pic;
+    private DefaultMutableTreeNode tag1, category, pic;
     private JPanel panel2;
-    
+    private String nodeString;
+  
     public static void main (String [] args){
 
-        new PictureFrame();
+        new PictureFrametestsave();
        
     }
-    private String nodeString;
     
-    public PictureFrame(){
+    
+    public PictureFrametestsave(){
        
         this.setSize(600,600);
         this.setTitle("Mi Pics");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       
-        try
-        {
-        FileInputStream fis = new FileInputStream("TreeSave");
-        ObjectInputStream ois= new ObjectInputStream(fis);
-        DefaultTreeModel model = (DefaultTreeModel)ois.readObject();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        final File saveF = new File("saveTreetest.ser");
+        
+        if (saveF.exists()){
+         try{
+        ObjectInputStream ois= new ObjectInputStream(new FileInputStream(saveF));
+        model = (DefaultTreeModel)ois.readObject();
+        ois.close();
+        
+        }
+        catch(IOException  | ClassNotFoundException err)
+        {System.out.println("We had a file loading issue");
+        }
+        }
          if(model ==null){
-             rootNode = new DefaultMutableTreeNode("Album  Pics");
-             model = new DefaultTreeModel(rootNode);    
+             model = new DefaultTreeModel(new DefaultMutableTreeNode("Photo Albums"));    
          }
+         
+         //final DefaultTreeModel innerModel = model;
+          tree = new JTree(model);
         
-        tree = new JTree(model);
-        cat = new DefaultMutableTreeNode("Books");
-        model.insertNodeInto(cat, rootNode, rootNode.getChildCount()); 
-        
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+         // tree.add(category);
+          tree.setEditable(true);
+          category = new DefaultMutableTreeNode("Books for Java Programmers");
+        //  tree.add(category);
+         this.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent event){
+                try{
+                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(saveF));
+                    oos.writeObject(model);
+                    oos.close();
+                }
+                catch(IOException err){
+                    err.printStackTrace();
+                }
+                System.exit(0);
+            }
+        });
+         
         tree.addTreeSelectionListener(this);
         JScrollPane scroll = new JScrollPane(tree);
         scroll.setPreferredSize(new Dimension(150, 200));
         JPanel panel2 = new JPanel();
         panel2.add(scroll);
         this.add(panel2, BorderLayout.WEST);
-        }
-        catch(Exception e)
-        {       
-        DefaultMutableTreeNode tagNode = getTagTree();
-        model = new DefaultTreeModel(tagNode);
-        tree = new JTree(model);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree.addTreeSelectionListener(this);
+        
+            
        
-        JScrollPane scroll = new JScrollPane(tree);
-        scroll.setPreferredSize(new Dimension(150, 200));
-        JPanel panel2 = new JPanel();
-        panel2.add(scroll);
-        this.add(panel2, BorderLayout.WEST);
-        }
+    
+    
+        
  
         
 
@@ -111,7 +127,7 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
         buttonPanel.add(getTag);
         
         JButton ChangeTag = new JButton("Change Tag");
-        ChangeTag.addActionListener(e -> changeTag());
+        //ChangeTag.addActionListener(e -> changeTag());
         buttonPanel.add(ChangeTag);
         
         this.add(buttonPanel, BorderLayout.SOUTH);
@@ -174,6 +190,10 @@ public class PictureFrame extends JFrame implements TreeSelectionListener {
   }
   }
 
+    private DefaultMutableTreeNode getStartNode() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
      private class PicturePanel extends JPanel{
          public void paint(Graphics g){
              g.drawImage(img, 0, 0, this);
@@ -193,13 +213,9 @@ public DefaultMutableTreeNode addPhoto(String title, DefaultMutableTreeNode pare
         return show;
     }
  
-private DefaultMutableTreeNode getTagTree (){
-     
-    this.rootNode = new DefaultMutableTreeNode("Photo Albums");
-    return rootNode;
-   
+
  
-}
+
     public void tree1Changed()
     {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
@@ -217,77 +233,45 @@ private DefaultMutableTreeNode getTagTree (){
     public void addTag() {
         if (file == null)
         {
-            JOptionPane.showMessageDialog(PictureFrame.this, "Please open a photo to tag first","Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(PictureFrametestsave.this, "Please open a photo to tag first","Error", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         String getTagName = textTag.getText();
         Tag tag = new Tag(getTagName, file.toString());
-       // DefaultMutableTreeNode parent = getSelectedNode();
+        //DefaultMutableTreeNode parent = getSelectedNode();
       //  System.out.println(parent);
-       
-        //This will get selected node may need to change it to find if You can create a method that will return you all the matching nodes. You can do it by iterating over all the nodes in the tree and check if there names matches the one in the set.
-/*
-   public java.util.List<TreePath> find(DefaultMutableTreeNode root, Set<String> s) {
-        java.util.List<TreePath> paths = new ArrayList<>();
-@SuppressWarnings("unchecked")
-        Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
-        while (e.hasMoreElements()) {
-            DefaultMutableTreeNode node = e.nextElement();
-            if (s.contains(node.toString())) {
-                paths.add(new TreePath(node.getPath()));
-            }
-        }
-        return paths;
-    }
-You can then call this method passing the tree node and Set of strings. Please note that you will need to cast the root to DefaultMutableTreeNode because getRoot returns Object.
-
-java.util.List<TreePath> treePaths=   find((DefaultMutableTreeNode)tree.getModel().getRoot(), someSet);
-Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
-
-    for (TreePath treePath : treePaths) {
-        tree.getSelectionModel().removeSelectionPath(treePath);
-    }*/
-       
-        //if (parent.toString() == getTagName){
-        //    model.insertNodeInto(new DefaultMutableTreeNode(getTagName),parent, parent.getChildCount());
-       // }
         
-
-        
-        //tagList.put(tag.getType(), tag.getValue());
- 
-               
-//String fileName = getImageFile(file); 
-     //  tag = tag.setValue(gettag);
-        
-
+      
         
         if (getTagName.length() ==0)
         {
-            JOptionPane.showMessageDialog(PictureFrame.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(PictureFrametestsave.this, "Please enter a Tag","Error", JOptionPane.INFORMATION_MESSAGE);
             
         }
     else
         {
             System.out.println(getTagName); 
-       
-            rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
-            System.out.println(rootNode);
+                  rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
+            System.out.println(rootNode);  
+            TreePath path = tree.getLeadSelectionPath();
+           
+                Object last = path.getLastPathComponent();
+               
+               
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode)last;
+            node.setUserObject(last);
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode("New Node");
+                model.insertNodeInto(newNode,node,node.getChildCount());
+            
+                
+                
+           
             DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
            rootNode.add(getTagTree);
-            this.model.insertNodeInto(getTagTree, rootNode, 0);   
+            this.model.insertNodeInto(getTagTree, rootNode, rootNode.getChildCount());   
            
-          this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, 0);
-              try
-        {
-        FileOutputStream fos = new FileOutputStream("Tree_Save.ser");
-        ObjectOutputStream oos= new ObjectOutputStream(fos);
-        oos.writeObject(model);
-        }
-        catch(Exception e)
-        {
-        }
-       // Similarly u can read the fileobject using the follwing code
+          this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
+          
         
 // tag1 = makeShow(tag.getType(), rootNode);   
          //  pic = makeShow(tag.getValue(), tag1); 
@@ -308,10 +292,10 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
         
     }
     }
-   private DefaultMutableTreeNode getSelectedNode(){
-       return (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+  // private DefaultMutableTreeNode getSelectedNode(){
+   //    return (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
        
-   }
+  // }
    private void addIcon(){
       /* JPanel panel3 = new JPanel();
        Toolkit kit = Toolkit.getDefaultToolkit();
@@ -328,14 +312,14 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
        this.validate();
        this.repaint();
    */}
-   private void changeTag(){
+   /*private void changeTag(){
        DefaultMutableTreeNode selectedNode = getSelectedNode();
        if (selectedNode == null){
-           JOptionPane.showMessageDialog(PictureFrame.this, "Select a Tag to Change", "Error", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(PictureFrametestsave.this, "Select a Tag to Change", "Error", JOptionPane.ERROR_MESSAGE);
        }
-       else { String newName = JOptionPane.showInputDialog(PictureFrame.this, "Enter a new tag name");
+       else { String newName = JOptionPane.showInputDialog(PictureFrametestsave.this, "Enter a new tag name");
        // Insert code to replace selectedNode with newName
        }
-   }
+   }*/
 }
 
