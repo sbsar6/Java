@@ -206,6 +206,7 @@ private DefaultMutableTreeNode getTagTree (){
         String getTagName = textTag.getText();
         Tag tag = new Tag(getTagName, file.toString());
         DefaultMutableTreeNode parent = getSelectedNode();
+        System.out.println(parent);
         
         //This will get selected node may need to change it to find if You can create a method that will return you all the matching nodes. You can do it by iterating over all the nodes in the tree and check if there names matches the one in the set.
 /*
@@ -256,7 +257,7 @@ Then iterate over treePaths and invoke removeSelectionPath to deselect the nodes
             rootNode = (DefaultMutableTreeNode)tree.getModel().getRoot();
             System.out.println(rootNode);
             DefaultMutableTreeNode getTagTree = new DefaultMutableTreeNode(getTagName);
-           
+           rootNode.add(getTagTree);
             this.model.insertNodeInto(getTagTree, rootNode, rootNode.getChildCount());   
            
           this.model.insertNodeInto(new DefaultMutableTreeNode(tag.getValue()), getTagTree, getTagTree.getChildCount());
